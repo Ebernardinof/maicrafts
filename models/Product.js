@@ -1,30 +1,28 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// Create Schema
-const UserSchema = new Schema({
-  name: {
+
+//create Schema
+const ProductSchema = new Schema({
+  title: {
     type: String,
     required: true,
   },
-  email: {
+  price: {
     type: String,
     required: true,
   },
-  password: {
+  description: {
     type: String,
     required: true,
   },
   picUrl: {
     type: String,
-  },
-  rights: {
-    buyer: Boolean,
-    merchant: Boolean,
-    admin: Boolean,
+    // required: true,
   },
   date: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
 });
-module.exports = User = mongoose.model("users", UserSchema);
+
+module.exports = Product = mongoose.model("product", ProductSchema);

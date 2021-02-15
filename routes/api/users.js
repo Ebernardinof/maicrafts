@@ -76,6 +76,8 @@ router.post("/register", (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
+        picUrl: req.body.picUrl,
+        rights: req.body.rights,
       });
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
@@ -90,6 +92,15 @@ router.post("/register", (req, res) => {
       });
     }
   });
+});
+
+router.get("/api/admin/is_admin", async (req, res) => {
+  const findAdmin = await User.find({ _id: req.user._id, admin: true });
+  if (findAdmin) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
 });
 
 module.exports = router;
