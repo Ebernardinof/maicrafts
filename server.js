@@ -4,7 +4,9 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
 const users = require("./routes/api/users");
-const items = require("./routes/api/users");
+const products = require("./routes/api/products");
+const uploader = require("./routes/api/uploader");
+require("dotenv").config();
 
 const app = express();
 
@@ -33,7 +35,10 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
-// app.use("/api/items", items);
+app.use("/api/products", products);
+app.use("/api/upload", uploader);
+
+//IMAGES
 
 //SErve static assets if in production
 if (process.env.NODE_ENV === "production") {
