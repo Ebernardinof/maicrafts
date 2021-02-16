@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
 
-import { connect } from "react-redux";
+// import { setCurrentUser, logoutUser } from "./actions/authActions";
+// import { Provider } from "react-redux";
+// import store from "./store";
 
 import NavBar from "./components/NavBar";
 import Landing from "./components/Landing";
@@ -10,12 +14,33 @@ import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./components/Dashboard";
 import ProductsShow from "./components/products/ProductsShow";
+import Footer from "./components/Footer";
 
 import createBrowserHistory from "./history";
 
 import "./App.css";
-import Footer from "./components/Footer";
 
+console.log(JSON.parse(window.localStorage.getItem("user")));
+// Check for token to keep user logged in
+// if (localStorage.jwtToken) {
+//   // Set auth token header auth
+//   const token = localStorage.jwtToken;
+//   setAuthToken(token);
+//   // Decode token and get user info and exp
+//   const decoded = jwt_decode(token);
+//   // Set user and isAuthenticated
+//   store.dispatch(setCurrentUser(decoded));
+//   // Check for expired token
+//   const currentTime = Date.now() / 1000; // to get in milliseconds
+//   if (decoded.exp < currentTime) {
+//     // Logout user
+//     store.dispatch(logoutUser());
+
+//     // Redirect to login
+//     window.location.href = "./login";
+//   }
+// }
+console.log(localStorage.getItem("jwtToken"));
 class App extends Component {
   // componentDidMount() {
   //   this.props.setCurrentUser();
@@ -23,27 +48,25 @@ class App extends Component {
   render() {
     console.log(this.props);
     return (
-      <Router history={createBrowserHistory}>
-        {/* <div className="container"> */}
-        <NavBar auth={this.props.auth} />
-        <Switch>
+      <>
+        {/* <Provider> */}
+        <Router>
+          {/* <div className="container"> */}
+          <NavBar auth={this.props.auth} />
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/products" component={ProductsShow} />
+          {/* <Switch>
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        </Switch>
-        {/* </div> */}
-        <Footer />
-      </Router>
+        </Switch> */}
+          {/* </div> */}
+          <Footer />
+        </Router>
+        {/* </Provider> */}
+      </>
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth,
-    // cart: state.cart,
-  };
-};
 
-export default connect(mapStateToProps)(App);
+export default App;

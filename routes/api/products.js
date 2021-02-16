@@ -3,7 +3,7 @@ const router = express.Router();
 
 //Item model
 const Product = require("../../models/Product");
-const { route } = require("./users");
+const { route } = require("./auth");
 
 router.get("/", (req, res) => {
   Product.find()

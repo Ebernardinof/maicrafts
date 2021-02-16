@@ -3,17 +3,18 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
+
+const auth = require("./routes/api/auth");
 const users = require("./routes/api/users");
 const products = require("./routes/api/products");
 const uploader = require("./routes/api/uploader");
-require("dotenv").config();
 
 const app = express();
 
 // Bodyparser middleware
 app.use(
   bodyParser.urlencoded({
-    extended: false,
+    extended: true,
   })
 );
 
@@ -34,7 +35,8 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-app.use("/api/users", users);
+app.use("/api/auth", auth);
+app.use("/api/users", passport.authenticate("jwt", { session: false }), users);
 app.use("/api/products", products);
 app.use("/api/upload", uploader);
 

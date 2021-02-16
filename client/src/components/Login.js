@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { loginUser } from "../actions/authActions";
+import { Link } from "react-router-dom";
+// import { connect } from "react-redux";
+// import { loginUser } from "../actions/authActions";
 import classnames from "classnames";
 
 class Login extends Component {
@@ -16,9 +16,9 @@ class Login extends Component {
 
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
-    }
+    // if (this.props.auth.isAuthenticated) {
+    //   this.props.history.push("/dashboard");
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,4 +115,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps, { loginUser })(withRouter(Login));
+export default Login;
