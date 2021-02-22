@@ -38,7 +38,7 @@ class Uploader extends Component {
           },
         })
         .then((response) => {
-          console.log("responded:", response.data);
+          // console.log("responded:", response.data);
           this.setState({
             picUrl: response.data,
             showEditAvatar: false,

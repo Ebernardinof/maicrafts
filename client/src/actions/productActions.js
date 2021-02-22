@@ -21,7 +21,7 @@ export const getProducts = () => (dispatch) => {
 
 export const addProduct = (products) => (dispatch, getState) => {
   api
-    .post("/api/products", products)
+    .post("/api/products/add", products)
     .then((res) =>
       dispatch({
         type: ADD_PRODUCT,

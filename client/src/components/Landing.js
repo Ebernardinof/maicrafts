@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
 import Dashboard from "./Dashboard";
 
 class Landing extends Component {
   render() {
-    console.log("landing", this.props);
+    console.log("landing state", this.props);
     return (
       <div>
         <div
@@ -72,4 +73,7 @@ class Landing extends Component {
     );
   }
 }
-export default Landing;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps)(Landing);

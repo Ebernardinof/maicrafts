@@ -1,25 +1,53 @@
-import { SET_CURRENT_USER, USER_LOADING } from "../actions/types";
+import {
+  LOGIN_USER,
+  CREATE_USER,
+  FETCH_USER,
+  LOGOUT_USER,
+} from "../actions/types";
 
 const isEmpty = require("is-empty");
 
 const initialState = {
-  isAuthenticated: false,
-  user: {},
+  isSignedIn: false,
+  firstName: "",
+  lastName: "",
+  email: "",
+  picUrl: "",
   loading: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_CURRENT_USER:
+    case LOGIN_USER:
+      console.log("LOGIN PAYLOAD USER", action.payload);
       return {
         ...state,
-        isAuthenticated: !isEmpty(action.payload),
+        isSignedIn: true,
         user: action.payload,
       };
-    case USER_LOADING:
+    case CREATE_USER:
+      console.log("CREATE_USER PAYLOAD USER", action.payload.user);
+
       return {
         ...state,
-        loading: true,
+        isSignedIn: true,
+        user: action.payload,
+      };
+    case FETCH_USER:
+      console.log("FETCH_USER PAYLOAD USER", action.payload.user);
+      if (action.payload._id) {
+        return {
+          ...state,
+          isSignedIn: true,
+          userId: action.payload._id,
+        };
+      }
+      return false;
+    case LOGOUT_USER:
+      return {
+        ...state,
+        isSignedIn: false,
+        user: null,
       };
     default:
       return state;

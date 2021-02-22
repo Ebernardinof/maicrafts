@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
     .then((products) => res.json(products));
 });
 
-router.post("/", (req, res) => {
+router.post("/add", (req, res) => {
   const newProduct = new Product({
     title: req.body.title,
     price: req.body.price,
@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
   newProduct.save().then((product) => res.json(product));
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/products/:id", (req, res) => {
   Product.findById(req.params.id)
     .then((product) => product.remove().then(() => res.json({ sucess: true })))
     .catch((err) => res.status(404).json({ sucess: false }));
