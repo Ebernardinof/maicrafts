@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-
-// import { setCurrentUser, logoutUser } from "./actions/authActions";
+import { connect } from "react-redux";
+import { fetchUser } from "./actions/authActions";
 // import { Provider } from "react-redux";
 // import store from "./store";
 
@@ -17,10 +17,9 @@ import ProductsShow from "./components/products/ProductsShow";
 import Footer from "./components/Footer";
 
 import createBrowserHistory from "./history";
-
 import "./App.css";
+// console.log(JSON.parse(window.localStorage.getItem("jwtToken")));
 
-console.log(JSON.parse(window.localStorage.getItem("user")));
 // Check for token to keep user logged in
 // if (localStorage.jwtToken) {
 //   // Set auth token header auth
@@ -40,33 +39,68 @@ console.log(JSON.parse(window.localStorage.getItem("user")));
 //     window.location.href = "./login";
 //   }
 // }
-console.log(localStorage.getItem("jwtToken"));
 class App extends Component {
-  // componentDidMount() {
-  //   this.props.setCurrentUser();
-  // }
+  componentDidMount() {
+    this.props.fetchUser();
+  }
   render() {
-    console.log(this.props);
+    console.log("[APP]", this.props);
+    const AdminRoute = ({ component: Component, ...rest }) => (
+      <Route
+        {...rest}
+        render={(props) =>
+          this.props.auth && this.props.auth.rights.admin ? (
+            <Component {...props} />
+          ) : this.props.auth === false ? (
+            <Redirect to="/adminz/login" />
+          ) : (
+            false
+          )
+        }
+      />
+    );
+    const LoggedRoute = ({ component: Component, ...rest }) => (
+      <Route
+        {...rest}
+        render={(props) =>
+          this.props.auth === true ? (
+            <Component {...props} />
+          ) : this.props.auth === false ? (
+            <Redirect to="/login" />
+          ) : (
+            false
+          )
+        }
+      />
+    );
+    console.log("FETCHUSER [APP]", this.props);
     return (
       <>
         {/* <Provider> */}
-        <Router>
+
+        <Router history={createBrowserHistory}>
+          <Switch>
+            <NavBar auth={this.props.auth} />
+          </Switch>
           {/* <div className="container"> */}
-          <NavBar auth={this.props.auth} />
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/products" component={ProductsShow} />
-          {/* <Switch>
-          <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        </Switch> */}
+          {/* <Route exact path="/dashboard" component={Dashboard} /> */}
+          <Route path="/dashboard" component={Dashboard} />
+          {/* <LoggedRoute path="/profile/edit" component={ProfileEdit} /> */}
+          {/* <PrivateRoute exact path="/dashboard" component={Dashboard} /> */}
+
           {/* </div> */}
           <Footer />
         </Router>
+        <div></div>
         {/* </Provider> */}
       </>
     );
   }
 }
+const mapStateToProps = (state) => ({ auth: state.auth });
 
-export default App;
+export default connect(mapStateToProps, { fetchUser })(App);

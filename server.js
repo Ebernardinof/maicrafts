@@ -4,22 +4,19 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const path = require("path");
 
+const cookieSession = require("cookie-session");
+const session = require("express-session");
 const auth = require("./routes/api/auth");
 const users = require("./routes/api/users");
 const products = require("./routes/api/products");
 const uploader = require("./routes/api/uploader");
 
+const keys = require("./config/keys");
+
 const app = express();
 
+require("./models/User");
 // Bodyparser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-
-app.use(bodyParser.json());
-
 // DB Config
 const db = require("./config/keys").mongoURI;
 // Connect to MongoDB
@@ -28,19 +25,35 @@ mongoose
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
 
-// Passport middleware
-app.use(passport.initialize());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
+app.use(bodyParser.json());
+
+app.use(
+  cookieSession({
+    //expires in 30 days
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey],
+  })
+);
 // Passport config
 require("./config/passport")(passport);
 
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Routes
 app.use("/api/auth", auth);
-app.use("/api/users", passport.authenticate("jwt", { session: false }), users);
+app.use("/api/users", users);
 app.use("/api/products", products);
 app.use("/api/upload", uploader);
 
-//IMAGES
+//DEBUGG
 
 //SErve static assets if in production
 if (process.env.NODE_ENV === "production") {

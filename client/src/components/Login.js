@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import { connect } from "react-redux";
-// import { loginUser } from "../actions/authActions";
+import { connect } from "react-redux";
+import { loginUser } from "../actions/authActions";
 import classnames from "classnames";
+
+import createBrowserHistory from "../history";
 
 class Login extends Component {
   constructor() {
@@ -12,22 +14,6 @@ class Login extends Component {
       password: "",
       errors: {},
     };
-  }
-
-  componentDidMount() {
-    // If logged in and user navigates to Login page, should redirect them to dashboard
-    // if (this.props.auth.isAuthenticated) {
-    //   this.props.history.push("/dashboard");
-    // }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
-    }
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
   }
 
   onChange = (e) => {
@@ -45,8 +31,7 @@ class Login extends Component {
   };
   render() {
     const { errors } = this.state;
-    console.log("login", this.props);
-    console.log("loginSTATE", this.state);
+    console.log("LOGIN", this.props.auth);
     return (
       <div className="ui container">
         <div className="ui segment">
@@ -115,4 +100,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 });
 
-export default Login;
+export default connect(mapStateToProps, { loginUser })(Login);
