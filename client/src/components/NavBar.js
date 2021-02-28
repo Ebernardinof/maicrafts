@@ -15,6 +15,9 @@ class NavBar extends Component {
           <Link to="/profile" className="item">
             Profile
           </Link>
+          <Link to="/products" className="item">
+            Products
+          </Link>
         </React.Fragment>
       );
     }
@@ -81,7 +84,7 @@ class NavBar extends Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <div className="ui secondary menu">
         <div className="item ">

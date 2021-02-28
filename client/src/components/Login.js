@@ -2,26 +2,33 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
-import classnames from "classnames";
 
+import FlashMessage from "../components/FlashMessage";
 import createBrowserHistory from "../history";
 
 class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: "",
-      password: "",
-      errors: {},
-    };
-  }
+  state = {
+    email: "",
+    password: "",
+  };
 
+  renderAuthError() {
+    if (this.props.message) {
+      return (
+        <FlashMessage
+          title={this.props.message.title}
+          text={this.props.message.text}
+        />
+      );
+    }
+  }
   onChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
+
     const userData = {
       email: this.state.email,
       password: this.state.password,
@@ -29,46 +36,30 @@ class Login extends Component {
     this.props.loginUser(userData);
     console.log(userData);
   };
+
   render() {
-    const { errors } = this.state;
-    console.log("LOGIN", this.props.auth);
+    console.log("LOGIN", this.props.message);
     return (
       <div className="ui container">
         <div className="ui segment">
-          <form noValidate className="ui form" onSubmit={this.onSubmit}>
+          <form className="ui form error" onSubmit={this.onSubmit}>
             <div className="field">
               <label htmlFor="email">Email</label>
               <input
                 onChange={this.onChange}
                 value={this.state.email}
-                error={errors.email}
-                className={classnames("", {
-                  invalid: errors.email || errors.emailnotfound,
-                })}
-                id="email"
+                name="email"
                 type="email"
               />
-              <span className="field error">
-                {errors.email}
-                {errors.emailnotfound}
-              </span>
             </div>
             <div className="field">
               <label htmlFor="password">Password</label>
               <input
                 onChange={this.onChange}
                 value={this.state.password}
-                error={errors.password}
-                className={classnames("", {
-                  invalid: errors.password || errors.passwordincorrect,
-                })}
-                id="password"
+                name="password"
                 type="password"
               />
-              <span className="field error">
-                {errors.password}
-                {errors.passwordincorrect}
-              </span>
             </div>
             <div className="wrapper">
               <button
@@ -83,6 +74,12 @@ class Login extends Component {
                 Login
               </button>
             </div>
+            {this.props.message && (
+              <FlashMessage
+                title={this.props.message.title}
+                text={this.props.message.text}
+              />
+            )}
           </form>
         </div>
         <div className="ui segment">
@@ -97,7 +94,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  errors: state.errors,
+  message: state.auth.message,
 });
 
 export default connect(mapStateToProps, { loginUser })(Login);

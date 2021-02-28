@@ -2,14 +2,27 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 // Create Schema
 const userSchema = new Schema({
-  name: String,
+  firstName: String,
+  lastName: String,
   email: String,
   password: String,
   picUrl: String,
-  date: {
-    type: Date,
-    default: Date.now,
+  createdAt: Date,
+  rights: {
+    buyer: Boolean,
+    admin: Boolean,
+  },
+  billing: {
+    country: String,
+    street: String,
+    city: String,
+    stateProv: String,
+    postalCode: String,
+    phone: String,
   },
 });
 module.exports = mongoose.model("User", userSchema);
+
+//one argument in mongoose means we try to fetch a model schema
+//two arguments in mongoose means we are trying to load something into it
 mongoose.model("users", userSchema);

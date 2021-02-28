@@ -7,6 +7,15 @@ const User = mongoose.model("users");
 
 const saltRounds = 10;
 
+// function createRights(rights) {
+//   if (rights.merchant) {
+//     rights = { merchant: true, buyer: false };
+//   } else {
+//     rights = { merchant: false, buyer: true };
+//   }
+//   return rights;
+// }
+
 module.exports = (passport) => {
   passport.serializeUser(function (user, done) {
     console.log("serializeUser: " + user._id);
@@ -43,16 +52,16 @@ module.exports = (passport) => {
           if (user) {
             req.autherror = {
               title: "This email is already taken",
-              text: "<a href='/login'>Login</a> or choose a different email",
+              text: "Login or choose a different email",
             };
             return done(null, false);
           } else {
             var newUser = new User();
             // set the user's local credentials
             newUser.email = email;
-            newUser.name = req.body.name;
-            //need to add merchant to buyer rights...
-            //probably need a flow of signup/login if account already exists
+            newUser.firstName = req.body.firstName;
+            newUser.lastName = req.body.lastName;
+            newUser.rights.buyer = true;
             newUser.confirmHash = md5(email + Date.now().toString());
             newUser.createdAt = new Date();
             newUser.password = bcrypt.hashSync(password, saltRounds);
@@ -86,7 +95,7 @@ module.exports = (passport) => {
             req.autherror = {
               title: "Wrong email",
               text:
-                "We can't find your email. You can try again or <a href='/forgot_password'>create an account</a>",
+                "We can't find your email. You can try again or create an account",
             };
             return done(null, false); // req.flash is the way to set flashdata using connect-flash
           }
@@ -94,8 +103,7 @@ module.exports = (passport) => {
           if (!bcrypt.compareSync(password, user.password)) {
             req.autherror = {
               title: "Wrong password, try again! ",
-              text:
-                "You forgot your password ? <a href='/forgot_password'>Click here</a>",
+              text: "Wrong password, try again or Signup ",
             };
 
             return done(null, false); // create the loginMessage and save it to session as flashdata
