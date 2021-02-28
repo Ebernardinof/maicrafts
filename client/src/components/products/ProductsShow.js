@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getProducts, deleteProduct } from "../../actions/productActions";
+import createBrowserHistory from "../../history";
 import Uploader from "../formik/Uploader";
 
 class ProductsShow extends Component {
@@ -39,6 +40,12 @@ class ProductsShow extends Component {
             </div>
           ))}
         </div>
+        <button
+          className="ui button"
+          onClick={() => createBrowserHistory.push("/payment")}
+        >
+          Checkout
+        </button>
       </div>
     );
   }

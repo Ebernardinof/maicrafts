@@ -10,6 +10,7 @@ const auth = require("./routes/api/auth");
 const users = require("./routes/api/users");
 const products = require("./routes/api/products");
 const uploader = require("./routes/api/uploader");
+const stripe = require("./routes/api/stripe");
 
 const keys = require("./config/keys");
 
@@ -21,7 +22,11 @@ require("./models/User");
 const db = require("./config/keys").mongoURI;
 // Connect to MongoDB
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
 
@@ -52,6 +57,7 @@ app.use("/api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/products", products);
 app.use("/api/upload", uploader);
+app.use("/api/stripe", stripe);
 
 //DEBUGG
 

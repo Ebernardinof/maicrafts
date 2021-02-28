@@ -13,6 +13,7 @@ router.post(
       auth: {
         userId: req.user.id,
         message: "success",
+        rights: req.user.rights,
       },
     });
   },
@@ -27,11 +28,10 @@ router.post(
   "/register",
   passport.authenticate("local-register", { failWithError: true }),
   async (req, res) => {
-    const { email, firstName, lastName, rights, tos } = req.body;
-
     return res.status(200).send({
       userId: req.user.id,
       message: "success",
+      rights: req.user.rights,
     });
   },
   function (err, req, res, next) {
@@ -40,16 +40,6 @@ router.post(
     }
   }
 );
-
-/* GET users listing. */
-router.get("/current_user", function (req, res, next) {
-  try {
-    console.log(req.user);
-    res.send(req.user);
-  } catch (err) {
-    res.send(401).send({ message: "User not logged" });
-  }
-});
 
 router.get("/logout", (req, res) => {
   req.logout();

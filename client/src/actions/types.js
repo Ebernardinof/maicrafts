@@ -1,7 +1,10 @@
-export const GET_ERRORS = "GET_ERRORS";
+export const SIGNUP_ERROR = "SIGNUP_ERROR";
 export const LOGIN_USER = "LOGIN_USER";
 export const CREATE_USER = "CREATE_USER";
 export const FETCH_USER = "FETCH_USER";
+export const FETCH_USER_PROFILE = "FETCH_USER_PROFILE";
+export const EDIT_USER_PROFILE = "EDIT_USER_PROFILE";
+export const EDIT_USER_PROFILE_ERROR = "EDIT_USER_PROFILE_ERROR";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";

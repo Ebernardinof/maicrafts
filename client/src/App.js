@@ -11,34 +11,16 @@ import NavBar from "./components/NavBar";
 import Landing from "./components/Landing";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import PrivateRoute from "./components/PrivateRoute";
+import UserProfile from "./components/profile/UserProfile";
+import UserProfileEdit from "./components/profile/UserProfileEdit";
+import Payment from "./stripe/Payment";
 import Dashboard from "./components/Dashboard";
 import ProductsShow from "./components/products/ProductsShow";
 import Footer from "./components/Footer";
 
 import createBrowserHistory from "./history";
 import "./App.css";
-// console.log(JSON.parse(window.localStorage.getItem("jwtToken")));
 
-// Check for token to keep user logged in
-// if (localStorage.jwtToken) {
-//   // Set auth token header auth
-//   const token = localStorage.jwtToken;
-//   setAuthToken(token);
-//   // Decode token and get user info and exp
-//   const decoded = jwt_decode(token);
-//   // Set user and isAuthenticated
-//   store.dispatch(setCurrentUser(decoded));
-//   // Check for expired token
-//   const currentTime = Date.now() / 1000; // to get in milliseconds
-//   if (decoded.exp < currentTime) {
-//     // Logout user
-//     store.dispatch(logoutUser());
-
-//     // Redirect to login
-//     window.location.href = "./login";
-//   }
-// }
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
@@ -63,7 +45,7 @@ class App extends Component {
       <Route
         {...rest}
         render={(props) =>
-          this.props.auth === true ? (
+          this.props.auth.isSignedIn === true ? (
             <Component {...props} />
           ) : this.props.auth === false ? (
             <Redirect to="/login" />
@@ -89,7 +71,9 @@ class App extends Component {
           <Route exact path="/products" component={ProductsShow} />
           {/* <Route exact path="/dashboard" component={Dashboard} /> */}
           <Route path="/dashboard" component={Dashboard} />
-          {/* <LoggedRoute path="/profile/edit" component={ProfileEdit} /> */}
+          <LoggedRoute path="/payment" component={Payment} />
+          <LoggedRoute path="/profile" component={UserProfile} />
+          <LoggedRoute path="/profile/edit" component={UserProfileEdit} />
           {/* <PrivateRoute exact path="/dashboard" component={Dashboard} /> */}
 
           {/* </div> */}
